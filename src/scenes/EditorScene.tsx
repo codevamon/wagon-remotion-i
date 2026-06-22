@@ -460,7 +460,7 @@ export const EditorScene: React.FC = () => {
                       opacity: interpolate(labelSpr, [0, 1], [0, 0.9]),
                     }}
                   >
-                    PROFESSIONAL
+                    A BRAND ISN'T GENERATED.
                   </div>
 
                   {/* "Video Editing" HUGE dramatic text */}
@@ -476,7 +476,7 @@ export const EditorScene: React.FC = () => {
                     }}
                   >
                     <SplitText
-                      text="Video Editing"
+                      text="IT'S DECIDED ON —"
                       delay={2}
                       stagger={3}
                       direction="up"
@@ -508,7 +508,7 @@ export const EditorScene: React.FC = () => {
                       transform: `translateY(${secondaryLabelY}px)`,
                     }}
                   >
-                    timeline precision
+                    CAREFULLY.
                   </div>
                 </div>
               );

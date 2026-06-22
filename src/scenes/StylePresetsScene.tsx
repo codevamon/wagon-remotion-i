@@ -24,12 +24,12 @@ const { fontFamily } = loadFont("normal", {
 });
 
 const STYLES = [
-  { name: "Cinematic", color: "#FF5F56", filter: "contrast(1.2) sepia(0.2)" },
-  { name: "Anime", color: COLORS.brand, filter: "saturate(1.5) contrast(1.1)" },
-  { name: "3D Render", color: "#27C93F", filter: "brightness(1.1)" },
-  { name: "Claymation", color: "#3357FF", filter: "contrast(0.9) saturate(0.8)" },
-  { name: "Line Art", color: "#A833FF", filter: "grayscale(1) contrast(1.5)" },
-  { name: "Photographic", color: "#FF33A8", filter: "none" },
+  { name: "Branding", color: "#FF5F56", filter: "contrast(1.2) sepia(0.2)" },
+  { name: "Packaging", color: COLORS.brand, filter: "saturate(1.5) contrast(1.1)" },
+  { name: "Web Design", color: "#27C93F", filter: "brightness(1.1)" },
+  { name: "Strategy", color: "#3357FF", filter: "contrast(0.9) saturate(0.8)" },
+  { name: "Copywriting", color: "#A833FF", filter: "grayscale(1) contrast(1.5)" },
+  { name: "Web Development", color: "#FF33A8", filter: "none" },
 ];
 
 const PARTICLES = Array.from({ length: 30 }, (_, i) => ({
@@ -171,7 +171,7 @@ export const StylePresetsScene: React.FC = () => {
                 filter: titleBlur > 0.5 ? `blur(${titleBlur}px)` : undefined,
               }}
             >
-              curated
+              
             </div>
           </Sequence>
 
@@ -192,7 +192,7 @@ export const StylePresetsScene: React.FC = () => {
               }}
             >
               <SplitText
-                text="Style Presets"
+                text="Templates make"
                 delay={0}
                 stagger={3}
                 direction="up"
@@ -224,7 +224,7 @@ export const StylePresetsScene: React.FC = () => {
                     transform: `translateY(${interpolate(subSpr, [0, 1], [10, 0])}px)`,
                   }}
                 >
-                  transform everything
+                  things easy.
                 </div>
               );
             })()}

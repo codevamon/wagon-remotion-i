@@ -359,7 +359,7 @@ export const PerformanceScene: React.FC = () => {
               }}
             >
               <CharacterReveal
-                text="LIGHTNING"
+                text="NEITHER MAKES"
                 delay={0}
                 stagger={1.5}
                 springConfig={{ damping: 11, stiffness: 120, mass: 0.35 }}
@@ -387,7 +387,7 @@ export const PerformanceScene: React.FC = () => {
                 backgroundClip: "text",
               }}
             >
-              FAST
+              THINGS TRUE.
             </div>
 
             {/* "blazing speed" tiny text */}
@@ -406,7 +406,7 @@ export const PerformanceScene: React.FC = () => {
                 marginTop: 8,
               }}
             >
-              blazing speed
+              
             </div>
           </div>
         </Sequence>
@@ -521,7 +521,7 @@ export const PerformanceScene: React.FC = () => {
                     color: COLORS.textMutedDark,
                   }}
                 >
-                  Rendered in
+                
                 </span>
                 <span
                   style={{
@@ -535,7 +535,7 @@ export const PerformanceScene: React.FC = () => {
                     letterSpacing: "-0.02em",
                   }}
                 >
-                  {counter}%
+                
                 </span>
                 <span
                   style={{
@@ -545,7 +545,7 @@ export const PerformanceScene: React.FC = () => {
                     color: COLORS.textMutedDark,
                   }}
                 >
-                  Real-time
+                
                 </span>
               </div>
             );

@@ -22,7 +22,7 @@ const { fontFamily } = loadFont("normal", {
 const CURSORS = [
   {
     color: "#FF5733",
-    label: "Diseño",
+    label: "Design",
     role: "Designer",
     start: { x: 80, y: 850 },
     end: { x: 760, y: 420 },
@@ -30,7 +30,7 @@ const CURSORS = [
   },
   {
     color: "#33FF57",
-    label: "Desarrollo",
+    label: "Development",
     role: "Developer",
     start: { x: 1850, y: 920 },
     end: { x: 1120, y: 490 },
@@ -38,7 +38,7 @@ const CURSORS = [
   },
   {
     color: "#3357FF",
-    label: "Estrategia",
+    label: "Strategy",
     role: "PM",
     start: { x: 480, y: -120 },
     end: { x: 880, y: 310 },
@@ -46,7 +46,7 @@ const CURSORS = [
   },
   {
     color: "#F0F",
-    label: "Dirección",
+    label: "Creative Direction",
     role: "Writer",
     start: { x: 1920, y: 80 },
     end: { x: 1220, y: 620 },
@@ -179,7 +179,7 @@ export const CollaborationScene: React.FC = () => {
   const titleBlockNoiseY = noise2D("tby", 0, frame * 0.008) * 3;
 
   return (
-    <AbsoluteFill style={{ backgroundColor: COLORS.bgWhite, overflow: "hidden" }} hidden>
+    <AbsoluteFill style={{ backgroundColor: COLORS.bgWhite, overflow: "hidden" }}>
 
       {/* ====== BACKGROUND WATERMARK "COLLAB" ====== */}
       <div
@@ -258,7 +258,7 @@ export const CollaborationScene: React.FC = () => {
               }}
             >
               <CharacterReveal
-                text="ANTES"
+                text="IT TAKES PEOPLE"
                 delay={0}
                 stagger={2}
                 springConfig={{ damping: 16, stiffness: 120, mass: 0.4 }}
@@ -281,7 +281,7 @@ export const CollaborationScene: React.FC = () => {
               }}
             >
               <CharacterReveal
-                text="Crear era"
+                text="WHO KNOW"
                 delay={8}
                 stagger={1.5}
                 springConfig={{ damping: 14, stiffness: 90, mass: 0.5 }}
@@ -303,7 +303,7 @@ export const CollaborationScene: React.FC = () => {
               }}
             >
               <CharacterReveal
-                text="HUMANO"
+                text="WHEN TO SAY NO."
                 delay={20}
                 stagger={2}
                 springConfig={{ damping: 12, stiffness: 80, mass: 0.6 }}

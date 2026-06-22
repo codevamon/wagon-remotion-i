@@ -8,6 +8,8 @@ import {
   Easing,
   random,
   interpolateColors,
+  Img,
+  staticFile,
 } from "remotion";
 import { noise2D } from "@remotion/noise";
 import { makeStar } from "@remotion/shapes";
@@ -15,7 +17,6 @@ import { evolvePath } from "@remotion/paths";
 import { makeTransform, scale as scaleTf } from "@remotion/animation-utils";
 import { loadFont } from "@remotion/google-fonts/Inter";
 import { COLORS } from "../constants";
-import { CreativlyLogo } from "../components/CreativlyLogo";
 import { AuroraBackground } from "../components/AuroraBackground";
 import { PulseRings } from "../components/PulseRings";
 import { CharacterReveal } from "../components/CharacterReveal";
@@ -83,14 +84,6 @@ export const OutroScene: React.FC = () => {
     config: { damping: 12, stiffness: 80, mass: 0.5 },
   });
 
-  // ".ai" yellow italic entrance
-  const aiSpr = spring({
-    frame: Math.max(0, frame - 15),
-    fps,
-    config: { damping: 10, stiffness: 100, mass: 0.4 },
-  });
-  const aiScale = interpolate(aiSpr, [0, 1], [0.3, 1]);
-
   // "Start Creating" entrance
   const ctaSpr = spring({
     frame: Math.max(0, frame - 25),
@@ -100,13 +93,6 @@ export const OutroScene: React.FC = () => {
   const ctaBlur = interpolate(ctaSpr, [0, 1], [8, 0]);
   const ctaScale = interpolate(ctaSpr, [0, 1], [0.8, 1]);
   const ctaPulse = 1 + 0.01 * noise2D("cta-pulse", frame * 0.03, 0);
-
-  // "free" tiny italic
-  const freeSpr = spring({
-    frame: Math.max(0, frame - 35),
-    fps,
-    config: { damping: 16, stiffness: 100 },
-  });
 
   return (
     <AbsoluteFill
@@ -211,7 +197,7 @@ export const OutroScene: React.FC = () => {
               <path d={HALO_PATH} fill="none" stroke={ringColor} strokeWidth="2" strokeLinecap="round" strokeDasharray={evolvedHalo.strokeDasharray} strokeDashoffset={evolvedHalo.strokeDashoffset} />
             </svg>
             <div style={{ filter: `drop-shadow(0 0 80px ${COLORS.brand}66) drop-shadow(0 0 40px ${COLORS.primary}33)` }}>
-              <CreativlyLogo size={300} mode="assemble" />
+              <Img src={staticFile("logo-white.png")} style={{ width: 180 }} />
             </div>
           </div>
         </Sequence>
@@ -233,34 +219,13 @@ export const OutroScene: React.FC = () => {
               }}
             >
               <CharacterReveal
-                text="creativly"
+                text="Wagon Studio"
                 delay={0}
                 stagger={2}
                 springConfig={{ damping: 14, stiffness: 100, mass: 0.5 }}
                 offsetY={40}
                 blur
               />
-            </div>
-            {/* ".ai" - yellow italic bouncy */}
-            <div
-              style={{
-                fontFamily,
-                fontWeight: 900,
-                fontStyle: "italic",
-                fontSize: 130,
-                background: "linear-gradient(135deg, #3B82F6, #06B6D4)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                color: "transparent",
-                padding: "0.15em 0.3em",
-                backgroundClip: "text",
-                letterSpacing: "-0.05em",
-                filter: `drop-shadow(0 0 30px ${COLORS.brand}55)`,
-                opacity: aiSpr,
-                transform: `scale(${aiScale}) translateY(${interpolate(aiSpr, [0, 1], [20, 0])}px)`,
-              }}
-            >
-              .ai
             </div>
           </div>
         </Sequence>
@@ -270,6 +235,22 @@ export const OutroScene: React.FC = () => {
           {(() => {
             const tagSpr = spring({ frame: Math.max(0, frame - 18), fps, config: { damping: 16, stiffness: 100 } });
             return (
+              <>
+              <div
+                style={{
+                  fontFamily,
+                  fontWeight: 400,
+                  fontStyle: "italic",
+                  fontSize: 22,
+                  color: COLORS.textMuted,
+                  letterSpacing: "0.08em",
+                  marginBottom: 10,
+                  opacity: tagSpr,
+                  transform: `translateY(${interpolate(tagSpr, [0, 1], [10, 0])}px)`,
+                }}
+              >
+                We don't make more. We make it matter.
+              </div>
               <div
                 style={{
                   fontFamily,
@@ -283,8 +264,9 @@ export const OutroScene: React.FC = () => {
                   marginTop: -15,
                 }}
               >
-                the future of creation
+                wagondesignstudio.com
               </div>
+              </>
             );
           })()}
         </Sequence>
@@ -292,13 +274,13 @@ export const OutroScene: React.FC = () => {
         {/* CTA button */}
         <Sequence from={25} layout="none">
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-            <div style={{ display: "flex", alignItems: "baseline", gap: 15 }}>
+            <div style={{ display: "flex", alignItems: "baseline" }}>
               <div
                 style={{
                   padding: "32px 80px",
-                  background: "linear-gradient(135deg, #3B82F6, #06B6D4)",
+                  background: "#F5F2EB",
                   borderRadius: 100,
-                  color: "#000",
+                  color: "#0A0A0A",
                   fontFamily,
                   fontWeight: 900,
                   fontSize: 42,
@@ -308,26 +290,7 @@ export const OutroScene: React.FC = () => {
                   filter: ctaBlur > 0.5 ? `blur(${ctaBlur}px)` : undefined,
                 }}
               >
-                Start Creating
-              </div>
-              {/* "free" tiny italic */}
-              <div
-                style={{
-                  fontFamily,
-                  fontWeight: 700,
-                  fontStyle: "italic",
-                  fontSize: 20,
-                  background: "linear-gradient(135deg, #3B82F6, #06B6D4)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  color: "transparent",
-                  padding: "0.15em 0.3em",
-                  backgroundClip: "text",
-                  opacity: freeSpr,
-                  transform: `translateY(${interpolate(freeSpr, [0, 1], [10, 0])}px)`,
-                }}
-              >
-                free
+                Hop on board
               </div>
             </div>
 

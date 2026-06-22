@@ -1138,7 +1138,7 @@ export const FocusedDemoScene: React.FC = () => {
             marginBottom: 6,
           }}
         >
-          AI-Powered
+          AI makes
         </div>
         <div
           style={{
@@ -1158,7 +1158,7 @@ export const FocusedDemoScene: React.FC = () => {
             transform: `translateY(${interpolate(subSpr, [0, 1], [25, 0])}px)`,
           }}
         >
-          Creative Studio
+          things fast.
         </div>
       </div>
     </AbsoluteFill>

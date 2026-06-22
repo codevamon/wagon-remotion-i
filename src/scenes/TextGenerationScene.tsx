@@ -28,9 +28,9 @@ const { fontFamily } = loadFont("normal", {
   subsets: ["latin"],
 });
 
-const GENERATED_TEXT = `Claro. Aquí tienes el guion:
+const GENERATED_TEXT = `Of course. Here's the script:
 
-[ESCENA 1: «Todo se ve bien…»
+[SCENE 1: 'It all looks good...']
 
 INT. FUTURISTIC OFFICE - DAY
 
@@ -356,7 +356,7 @@ export const TextGenerationScene: React.FC = () => {
               filter: `blur(${headerSmallBlur}px)`,
             }}
           >
-            PÍDELO Y
+            EVERY WORD,
           </div>
 
           {/* "GENERATION" - huge weight 900 */}
@@ -372,7 +372,7 @@ export const TextGenerationScene: React.FC = () => {
               filter: `blur(${headerBigBlur}px)`,
             }}
           >
-            APARECE
+            ON PURPOSE
           </div>
         </div>
       </Sequence>
@@ -477,7 +477,7 @@ export const TextGenerationScene: React.FC = () => {
                     User:
                   </span>{" "}
                   <span style={{ color: COLORS.textMutedDark, fontWeight: 400 }}>
-                    Escribe un brand film sobre por qué el diseño importa
+                    Write a brand film about why design matters
                   </span>
                 </div>
               </Sequence>

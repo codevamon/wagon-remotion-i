@@ -4,455 +4,179 @@ import {
   useVideoConfig,
   interpolate,
   spring,
-  Sequence,
   Img,
   staticFile,
-  Easing,
-  random,
 } from "remotion";
-import { noise2D } from "@remotion/noise";
-import { makeStar } from "@remotion/shapes";
-import { evolvePath } from "@remotion/paths";
-import {
-  makeTransform,
-  scale,
-  translateY,
-  rotate,
-} from "@remotion/animation-utils";
-import { loadFont } from "@remotion/google-fonts/Inter";
+import { loadFont as loadAnton } from "@remotion/google-fonts/Anton";
+import { loadFont as loadInter } from "@remotion/google-fonts/Inter";
 import { COLORS } from "../constants";
-import { PulseRings } from "../components/PulseRings";
-import { Rotating3DSphere, FloatingDiamond } from "../components/Rotating3D";
 
-const { fontFamily } = loadFont("normal", {
-  weights: ["400", "700", "900"],
-  subsets: ["latin"],
-});
-
-const STAR_PARTICLES = Array.from({ length: 18 }, (_, i) => ({
-  x: random(`star-x-${i}`) * 1920,
-  y: random(`star-y-${i}`) * 1080,
-  size: random(`star-s-${i}`) * 20 + 8,
-  speed: random(`star-sp-${i}`) * 0.4 + 0.1,
-  delay: random(`star-d-${i}`) * 30,
-}));
-
-const UNDERLINE_PATH = "M 0 0 Q 200 -20 400 0 Q 600 20 800 0";
+const { fontFamily: fontDisplay } = loadAnton();
+const { fontFamily: fontBody } = loadInter();
 
 export const IntroScene: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  // Stage 1: Logo blur-to-sharp
-  const logoSpr = spring({
+  const headerSpr = spring({
     frame,
     fps,
     config: { damping: 12, stiffness: 80, mass: 0.6 },
   });
-  const logoScaleVal = interpolate(logoSpr, [0, 1], [1.8, 1]);
-  const logoBlur = interpolate(logoSpr, [0, 1], [25, 0]);
-  const logoOpacity = interpolate(logoSpr, [0, 1], [0, 1]);
+  const headerY = interpolate(headerSpr, [0, 1], [12, 0]);
 
-  const logoNoiseX = noise2D("logo-x", frame * 0.01, 0) * 8;
-  const logoNoiseY = noise2D("logo-y", 0, frame * 0.01) * 6;
-
-  const sceneScale = interpolate(frame, [0, 105], [1, 1.06], {
-    easing: Easing.out(Easing.quad),
-  });
-
-  const underlineProgress = interpolate(frame, [50, 75], [0, 1], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-    easing: Easing.out(Easing.cubic),
-  });
-  const underlinePath = evolvePath(underlineProgress, UNDERLINE_PATH);
-
-  const haloOpacity = interpolate(frame, [0, 25], [0, 0.4], {
-    extrapolateRight: "clamp",
-    easing: Easing.out(Easing.cubic),
-  });
-  const haloRotation = frame * 0.8;
-
-  // "VISUAL" word - massive, kinetic entrance
-  const visualSpr = spring({
-    frame: Math.max(0, frame - 8),
+  const line1Spr = spring({
+    frame,
     fps,
     config: { damping: 10, stiffness: 80, mass: 0.6 },
   });
-  const visualScale = interpolate(visualSpr, [0, 1], [3, 1]);
-  const visualBlur = interpolate(visualSpr, [0, 1], [20, 0]);
-  const visualRotation = interpolate(visualSpr, [0, 1], [-8, 0]);
+  const line1Y = interpolate(line1Spr, [0, 1], [28, 0]);
 
-  // "AI" word - giant italic, slides from right
-  const aiSpr = spring({
-    frame: Math.max(0, frame - 18),
-    fps,
-    config: { damping: 12, stiffness: 60, mass: 0.5 },
-  });
-  const aiX = interpolate(aiSpr, [0, 1], [400, 0]);
-  const aiBlur = interpolate(aiSpr, [0, 1], [15, 0]);
-
-  // "The Generative" - small caps, elegant entrance
-  const subSpr = spring({
-    frame: Math.max(0, frame - 35),
-    fps,
-    config: { damping: 16, stiffness: 100, mass: 0.5 },
-  });
-  const subY = interpolate(subSpr, [0, 1], [30, 0]);
-
-  // "Playground" - yellow highlighted, bouncy
-  const playSpr = spring({
-    frame: Math.max(0, frame - 45),
+  const line2Spr = spring({
+    frame: Math.max(0, frame - 28),
     fps,
     config: { damping: 8, stiffness: 120, mass: 0.4 },
   });
-  const playScale = interpolate(playSpr, [0, 1], [0.3, 1]);
+  const line2Y = interpolate(line2Spr, [0, 1], [24, 0]);
 
-  // "For Creators" - italic, small
-  const creatorsSpr = spring({
-    frame: Math.max(0, frame - 60),
+  const footerSpr = spring({
+    frame: Math.max(0, frame - 14),
     fps,
     config: { damping: 14, stiffness: 80, mass: 0.5 },
   });
+  const footerY = interpolate(footerSpr, [0, 1], [10, 0]);
+
+  const headlineStyle = {
+    fontFamily: fontDisplay,
+    fontSize: 46,
+    lineHeight: 0.95,
+    letterSpacing: "-0.01em",
+    color: "#191919",
+    fontWeight: 400,
+    textTransform: "lowercase" as const,
+  };
 
   return (
     <AbsoluteFill
       style={{
-        backgroundColor: "#F5F2EB",
+        backgroundColor: COLORS.bgWhite,
+        padding: 56,
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
         overflow: "hidden",
-        transform: `scale(${sceneScale})`,
       }}
     >
-      {/* Ambient glow - now yellow-tinted */}
+      {/* Header */}
       <div
         style={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          width: "80%",
-          height: "80%",
-          background: "transparent",
-          transform: "translate(-50%, -50%)",
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "flex-start",
+          opacity: headerSpr,
+          transform: `translateY(${headerY}px)`,
         }}
-      />
-      {/* 3D Rotating spheres in corners */}
-      <Rotating3DSphere
-        size={160}
-        color="#0A0A0A26"
-        x={150}
-        y={120}
-        speed={0.7}
-        delay={5}
-        noiseId="intro-s1"
-      />
-      <Rotating3DSphere
-        size={100}
-        color="#0A0A0A26"
-        x={1650}
-        y={800}
-        speed={1.2}
-        delay={10}
-        noiseId="intro-s2"
-      />
-      {/* Floating 3D diamonds */}
-      <FloatingDiamond
-        size={40}
-        color="#0A0A0A26"
-        x={300}
-        y={750}
-        speed={0.8}
-        delay={8}
-        noiseId="d1"
-        glow
-        glowColor="#0A0A0A"
-      />
-      <FloatingDiamond
-        size={25}
-        color="#0A0A0A26"
-        x={1500}
-        y={200}
-        speed={1.3}
-        delay={12}
-        noiseId="d2"
-      />
-      <FloatingDiamond
-        size={55}
-        color="#0A0A0A26"
-        x={1700}
-        y={500}
-        speed={0.6}
-        delay={15}
-        noiseId="d3"
-        glow
-        glowColor="#0A0A0A"
-      />
-      <FloatingDiamond
-        size={30}
-        color="#0A0A0A26"
-        x={200}
-        y={350}
-        speed={1}
-        delay={20}
-        noiseId="d4"
-      />
-      {/* Star particles */}
-      {STAR_PARTICLES.map((s, i) => {
-        const starPath = makeStar({
-          points: 4,
-          innerRadius: s.size * 0.3,
-          outerRadius: s.size,
-        });
-        const drift = noise2D(`drift-${i}`, frame * 0.015 * s.speed, i * 10);
-        const pulse = Math.sin(frame * 0.08 + i * 2) * 0.4 + 0.4;
-        const starOpacity = interpolate(
-          frame,
-          [s.delay, s.delay + 15],
-          [0, pulse * 0.15],
-          {
-            extrapolateLeft: "clamp",
-            extrapolateRight: "clamp",
-          },
-        );
-        const starRotation = frame * s.speed * 2;
-
-        return (
-          <svg
-            key={`star-${i}`}
-            width={s.size * 2.5}
-            height={s.size * 2.5}
-            viewBox={`0 0 ${starPath.width} ${starPath.height}`}
-            style={{
-              position: "absolute",
-              left: s.x + drift * 20,
-              top:
-                s.y +
-                noise2D(`drifty-${i}`, i * 10, frame * 0.015 * s.speed) * 20,
-              opacity: starOpacity,
-              transform: makeTransform([rotate(`${starRotation}deg`)]),
-            }}
-          >
-            <path
-              d={starPath.path}
-              fill="none"
-              stroke="#0A0A0A"
-              strokeWidth="1"
-            />
-          </svg>
-        );
-      })}
-      <PulseRings
-        count={5}
-        color="#0A0A0A26"
-        maxSize={1400}
-        speed={0.3}
-        strokeWidth={1}
-      />
-      {/* Rotating halo rings */}
-      <div
-        style={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          width: 500,
-          height: 500,
-          transform: translate(-250, -320) + ` rotate(${haloRotation}deg)`,
-          border: "2px solid rgba(10, 10, 10, 0.12)",
-          borderTop: "2px solid rgba(10, 10, 10, 0.25)",
-          borderRadius: "50%",
-          opacity: haloOpacity,
-          filter: "drop-shadow(0 8px 24px rgba(0, 0, 0, 0.12))",
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          width: 600,
-          height: 600,
-          transform:
-            translate(-300, -370) + ` rotate(${-haloRotation * 0.7}deg)`,
-          border: "1px solid rgba(10, 10, 10, 0.08)",
-          borderBottom: "1px solid rgba(10, 10, 10, 0.2)",
-          borderRadius: "50%",
-          opacity: haloOpacity,
-        }}
-      />
-      {/* Third halo ring */}
-      <div
-        style={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          width: 380,
-          height: 380,
-          transform:
-            translate(-190, -260) + ` rotate(${haloRotation * 1.3}deg)`,
-          border: "1px solid rgba(10, 10, 10, 0.09)",
-          borderLeft: "2px solid rgba(10, 10, 10, 0.22)",
-          borderRadius: "50%",
-          opacity: haloOpacity * 0.6,
-        }}
-      />
-      <AbsoluteFill style={{ justifyContent: "center", alignItems: "center" }}>
+      >
         <div
           style={{
-            textAlign: "center",
-            zIndex: 10,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
+            fontFamily: fontBody,
+            fontSize: 74,
+            color: "#191919",
           }}
         >
-          {/* Logo entrance */}
-          <Sequence from={0} layout="none">
-            <Img
-              src={staticFile("logo-white.png")}
-              style={{
-                width: 220,
-                height: "auto",
-                marginBottom: 30,
-
-                transform: makeTransform([
-                  scale(logoScaleVal),
-                  translateY(logoNoiseY),
-                ]),
-
-                opacity: logoOpacity,
-                filter: `brightness(0) blur(${logoBlur}px) drop-shadow(0 8px 24px rgba(0, 0, 0, 0.18))`,
-                marginLeft: logoNoiseX,
-              }}
-            />
-          </Sequence>
-
-          {/* VISUAL - massive, kinetic */}
-          <Sequence from={8} layout="none">
-            <div
-              style={{
-                fontFamily,
-                fontWeight: 900,
-                fontSize: 150,
-                color: "#0A0A0A",
-                letterSpacing: "-0.06em",
-                lineHeight: 0.8,
-                transform: `scale(${visualScale}) rotate(${visualRotation}deg)`,
-                opacity: visualSpr,
-                filter: visualBlur > 0.5 ? `blur(${visualBlur}px)` : undefined,
-                textShadow: "0 8px 24px rgba(0, 0, 0, 0.08)",
-              }}
-            >
-              TODO 
-            </div>
-          </Sequence>
-
-          {/* "The Generative" - small elegant caps */}
-          <Sequence from={35} layout="none">
-            <div
-              style={{
-                fontFamily,
-                fontWeight: 400,
-                fontSize: 28,
-                color: "rgba(10, 10, 10, 0.5)",
-                letterSpacing: "0.25em",
-                textTransform: "uppercase",
-                marginTop: 15,
-                transform: `translateY(${subY}px)`,
-                opacity: subSpr,
-              }}
-            >
-              se ve
-            </div>
-          </Sequence>
-
-          {/* AI - giant italic yellow, slides from right */}
-          <Sequence from={18} layout="none">
-            <div
-              style={{
-                fontFamily,
-                fontWeight: 900,
-                fontSize: 200,
-                color: "#0A0A0A",
-                lineHeight: 0.7,
-                padding: "0.15em 0.3em",
-                margin: "0 0.15em",
-                transform: `translateX(${aiX}px) skewX(-5deg)`,
-                opacity: aiSpr,
-                filter:
-                  aiBlur > 0.5
-                    ? `blur(${aiBlur}px) drop-shadow(0 8px 24px rgba(0, 0, 0, 0.12))`
-                    : "drop-shadow(0 8px 24px rgba(0, 0, 0, 0.12))",
-              }}
-            >
-              BIEN
-            </div>
-          </Sequence>
-
-          {/* SVG underline */}
-          <Sequence from={10} layout="none" hidden>
-            <svg
-              width="800"
-              height="30"
-              viewBox="-10 -25 820 50"
-              style={{ marginTop: -5, opacity: underlineProgress }}
-            >
-              <path
-                d={UNDERLINE_PATH}
-                fill="none"
-                stroke={COLORS.brand}
-                strokeWidth="3"
-                strokeLinecap="round"
-                strokeDasharray={underlinePath.strokeDasharray}
-                strokeDashoffset={underlinePath.strokeDashoffset}
-              />
-            </svg>
-          </Sequence>
-
-          {/* "Playground" - BIG yellow italic */}
-          <Sequence from={45} layout="none" hidden>
-            <div
-              style={{
-                fontFamily,
-                fontWeight: 900,
-                fontStyle: "italic",
-                fontSize: 90,
-                color: "#0A0A0A",
-                padding: "0.15em 0.3em",
-                letterSpacing: "-0.03em",
-                transform: `scale(${playScale}) skewX(-3deg)`,
-                opacity: playSpr,
-                filter: "drop-shadow(0 8px 20px rgba(0, 0, 0, 0.1))",
-                marginTop: -5,
-              }}
-            >
-              GREAT BRANDS
-            </div>
-          </Sequence>
-
-          {/* "for creators" - tiny italic */}
-          <Sequence from={60} layout="none">
-            <div
-              style={{
-                fontFamily,
-                fontWeight: 700,
-                fontStyle: "italic",
-                fontSize: 22,
-                color: "rgba(10, 10, 10, 0.5)",
-                letterSpacing: "0.1em",
-                textTransform: "lowercase",
-                marginTop: 10,
-                opacity: creatorsSpr,
-                transform: `translateY(${interpolate(creatorsSpr, [0, 1], [15, 0])}px)`,
-              }}
-            >
-             por wagondesignstudio.com
-            </div>
-          </Sequence>
+          <Img src={staticFile("logo-white.png")} style={{ width: 180, filter: "invert(1)" }} />
         </div>
-      </AbsoluteFill>
+        <div
+          style={{
+            fontFamily: fontBody,
+            fontSize: 25,
+            color: "#5f5e5a",
+          }}
+        >
+          wagondesignstudio.com
+        </div>
+      </div>
+
+      {/* Central copy */}
+      <div
+        style={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          gap: 48,
+        }}
+      >
+        <div
+          style={{
+            maxWidth: "86%",
+            alignSelf: "flex-start",
+            opacity: line1Spr,
+            transform: `translateY(${line1Y}px)`,
+          }}
+        >
+          <div style={headlineStyle}>anyone can make something now.</div>
+        </div>
+
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            width: "100%",
+          }}
+        >
+          <div
+            style={{
+              maxWidth: "60%",
+              textAlign: "right",
+              opacity: line2Spr,
+              transform: `translateY(${line2Y}px)`,
+            }}
+          >
+            <div style={{ ...headlineStyle, fontStyle: "italic" }}>
+              almost no one makes it matter.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div
+        style={{
+          borderTop: "1px solid #191919",
+          paddingTop: 14,
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "flex-start",
+          opacity: footerSpr,
+          transform: `translateY(${footerY}px)`,
+        }}
+      >
+        <div
+          style={{
+            fontFamily: fontBody,
+            fontSize: 10,
+            fontWeight: 700,
+            letterSpacing: "0.1em",
+            textTransform: "uppercase",
+            color: "#191919",
+          }}
+        >
+          a wagon studio film
+        </div>
+        <div
+          style={{
+            fontFamily: fontBody,
+            fontSize: 11,
+            fontStyle: "italic",
+            color: "#5f5e5a",
+          }}
+        >
+          2026
+        </div>
+      </div>
     </AbsoluteFill>
   );
 };
-
-function translate(x: number, y: number) {
-  return `translate(${x}px, ${y}px)`;
-}

@@ -21,12 +21,12 @@ import { Rotating3DSphere, FloatingDiamond } from "../components/Rotating3D";
 const { fontFamily } = loadFont("normal", { weights: ["400", "500", "700", "900"] });
 
 const MODELS = [
-  "GPT-4o", "Claude 3.5", "Midjourney 6", "Runway Gen-3",
-  "Pika Art", "Suno v3", "ElevenLabs", "Gemini 1.5",
-  "Llama 3", "Mistral Large", "Cohere", "Fal.ai",
-  "Stable Video", "HuggingFace", "Flux Pro", "Ideogram",
-  "Kling", "Luma Dream", "Sora", "DALL-E 3",
-  "Whisper", "ControlNet", "AnimateDiff", "Jukebox",
+  "Impulse Beans", "Superspoon", "Kyemera", "Pricklee",
+  "Impulse Beans", "Superspoon", "Kyemera", "Pricklee",
+  "Impulse Beans", "Superspoon", "Kyemera", "Pricklee",
+  "Impulse Beans", "Superspoon", "Kyemera", "Pricklee",
+  "Impulse Beans", "Superspoon", "Kyemera", "Pricklee",
+  "Impulse Beans", "Superspoon", "Kyemera", "Pricklee",
 ];
 
 const STARS = Array.from({ length: 15 }, (_, i) => ({
@@ -53,7 +53,7 @@ export const ModelsScene: React.FC = () => {
 
   const centerGlow = 0.4 + 0.15 * noise2D("cglow", frame * 0.02, 0);
 
-  const countProgress = interpolate(frame, [15, 45], [0, 30], {
+  const countProgress = interpolate(frame, [15, 45], [0, 85], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
     easing: Easing.out(Easing.cubic),
@@ -276,7 +276,7 @@ export const ModelsScene: React.FC = () => {
                 marginBottom: 8,
               }}
             >
-              AI
+              BRANDS
             </div>
             {/* "MODELS INCLUDED" - bold */}
             <div
@@ -290,12 +290,25 @@ export const ModelsScene: React.FC = () => {
               }}
             >
               <CharacterReveal
-                text="Luego, todos pudieron hacer de todo"
+                text="WE'VE SAID NO ENOUGH TIMES"
                 delay={5}
                 stagger={2}
                 springConfig={{ damping: 16, stiffness: 120, mass: 0.4 }}
                 offsetY={25}
               />
+            </div>
+            <div
+              style={{
+                fontFamily,
+                fontWeight: 900,
+                fontSize: 44,
+                color: "white",
+                letterSpacing: "0.15em",
+                textTransform: "uppercase",
+                marginTop: 12,
+              }}
+            >
+              TO KNOW WHAT A YES LOOKS LIKE.
             </div>
           </div>
         </AbsoluteFill>
